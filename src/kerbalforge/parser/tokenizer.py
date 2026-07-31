@@ -1,29 +1,30 @@
 from __future__ import annotations
 
+from typing import Self
+
 from .tokens import Token, TokenType
 
 
 class Tokenizer:
-
-    def __init__(self, text: str):
+    def __init__(self, text: str) -> None:
         self.text = text
         self.index = 0
         self.line = 1
         self.column = 1
+        self._finished = False
 
-    def __iter__(self):
+    def __iter__(self) -> Self:
         return self
 
-    def __next__(self):
-        ...
-    
     def tokenize(self) -> list[Token]:
-        # return list(self)
+        """Temporary compatibility wrapper."""
+        return list(self)
 
-        tokens: list[Token] = []
+    def __next__(self) -> Token:
+        if self._finished:
+            raise StopIteration
 
         while not self._eof():
-
             ch = self._peek()
 
             if ch in " \t\r":
@@ -35,42 +36,41 @@ class Tokenizer:
                 continue
 
             if ch == "{":
-                tokens.append(self._make(TokenType.LBRACE, "{"))
+                token = self._make(TokenType.LBRACE, "{")
                 self._advance()
-                continue
+                return token
 
             if ch == "}":
-                tokens.append(self._make(TokenType.RBRACE, "}"))
+                token = self._make(TokenType.RBRACE, "}")
                 self._advance()
-                continue
+                return token
 
             if ch == "=":
-                tokens.append(self._make(TokenType.EQUALS, "="))
+                token = self._make(TokenType.EQUALS, "=")
                 self._advance()
-                continue
+                return token
 
-            tokens.append(self._identifier())
+            return self._read_identifier()
 
-        tokens.append(Token(TokenType.EOF, "", self.line, self.column))
+        self._finished = True
+        return Token(TokenType.EOF, "", self.line, self.column)
 
-        return tokens
-
-    def _identifier(self) -> Token:
-
+    def _read_identifier(self) -> Token:
         start_line = self.line
         start_col = self.column
 
-        chars = []
+        chars: list[str] = []
 
         while not self._eof():
-
             ch = self._peek()
 
-            if ch in "\n={}":
+            if ch.isspace():
+                break
+
+            if ch in "{}=":
                 break
 
             chars.append(ch)
-
             self._advance()
 
         return Token(
@@ -80,20 +80,20 @@ class Tokenizer:
             start_col,
         )
 
-    def _peek(self):
+    def _peek(self) -> str:
         return self.text[self.index]
 
-    def _advance(self):
+    def _advance(self) -> None:
         self.index += 1
         self.column += 1
 
-    def _advance_line(self):
+    def _advance_line(self) -> None:
         self.index += 1
         self.line += 1
         self.column = 1
 
-    def _eof(self):
+    def _eof(self) -> bool:
         return self.index >= len(self.text)
 
-    def _make(self, t, value):
-        return Token(t, value, self.line, self.column)
+    def _make(self, token_type: TokenType, value: str) -> Token:
+        return Token(token_type, value, self.line, self.column)
