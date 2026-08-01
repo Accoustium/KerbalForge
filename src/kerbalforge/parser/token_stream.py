@@ -57,3 +57,8 @@ class TokenStream:
             raise SyntaxError(f"Expected {token_type.name}, got {token.type.name}")
 
         return self.consume()
+
+    def expect_identifier(self) -> str:
+        token = self.expect(TokenType.IDENTIFIER)
+
+        return token.value
