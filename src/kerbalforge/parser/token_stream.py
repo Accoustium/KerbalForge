@@ -12,7 +12,7 @@ class TokenStream:
         self._iterator: Iterator[Token] = iter(tokens)
         self._buffer: Token | None = None
 
-    def peek(self) -> Token:
+    def peek(self, offset: int = 0) -> Token:
         """Return the next token without consuming it."""
 
         if self._buffer is None:
