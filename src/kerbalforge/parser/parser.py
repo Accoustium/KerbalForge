@@ -33,6 +33,9 @@ class Parser:
         return node
 
     def _parse_statement(self) -> Statement:
+        if self._stream.peek_type(1) is TokenType.LBRACE:
+            return self._parse_node()
+
         return self._parse_property()
 
     def _parse_property(self) -> Property:

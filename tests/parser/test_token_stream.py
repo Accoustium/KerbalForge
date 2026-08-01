@@ -53,3 +53,29 @@ def test_expect_failure() -> None:
 
     with pytest.raises(SyntaxError):
         stream.expect(TokenType.RBRACE)
+
+
+def test_tokenstream_peek_offset() -> None:
+    stream = TokenStream(
+        Tokenizer(
+            """
+MODULE
+{
+}
+"""
+        )
+    )
+
+    assert stream.peek_type() is TokenType.IDENTIFIER
+    assert stream.peek_type(1) is TokenType.LBRACE
+
+
+def test_peek_two_tokens() -> None:
+    stream = TokenStream(Tokenizer("MODULE\n{\n}\n"))
+
+    assert stream.peek().type is TokenType.IDENTIFIER
+    assert stream.peek(1).type is TokenType.LBRACE
+
+    # Ensure peeking didn't consume anything
+    assert stream.consume().type is TokenType.IDENTIFIER
+    assert stream.consume().type is TokenType.LBRACE

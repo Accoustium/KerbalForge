@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from collections import deque
 from collections.abc import Iterable, Iterator
 
 from .tokens import Token, TokenType
@@ -10,28 +11,29 @@ class TokenStream:
 
     def __init__(self, tokens: Iterable[Token]) -> None:
         self._iterator: Iterator[Token] = iter(tokens)
-        self._buffer: Token | None = None
+        self._buffer: deque[Token] = deque()
+
+    def _fill(self, count: int) -> None:
+        while len(self._buffer) <= count:
+            try:
+                self._buffer.append(next(self._iterator))
+            except StopIteration as exc:
+                raise SyntaxError("Unexpected end of input") from exc
 
     def peek(self, offset: int = 0) -> Token:
-        """Return the next token without consuming it."""
+        self._fill(offset)
+        return self._buffer[offset]
 
-        if self._buffer is None:
-            self._buffer = next(self._iterator)
+    def consume(self) -> Token:
+        self._fill(0)
+        return self._buffer.popleft()
 
-        return self._buffer
+    def peek_type(self, offset: int = 0) -> TokenType:
+        return self.peek(offset).type
 
     @property
     def eof(self) -> bool:
         return self.peek().type is TokenType.EOF
-
-    def consume(self) -> Token:
-        """Consume and return the next token."""
-
-        token = self.peek()
-
-        self._buffer = None
-
-        return token
 
     def match(self, token_type: TokenType) -> bool:
         """Consume the next token if it matches."""
