@@ -14,26 +14,40 @@ def test_token_location() -> None:
         column=17,
     )
 
-    assert SourceLocation(line=token.line, column=token.column) == SourceLocation(
+    assert SourceSpanner.location(line=token.line, column=token.column) == SourceLocation(
         line=4,
         column=17,
     )
 
 
 def test_single_location_span() -> None:
-    location = SourceLocation(3, 8)
+    token = Token(
+        TokenType.IDENTIFIER,
+        "PART",
+        line=4,
+        column=17,
+    )
 
-    assert SourceSpanner.single(location) == SourceSpan(
-        start=location,
-        end=location,
+    assert SourceSpanner.token(token) == SourceSpan(
+        start=SourceSpanner.location(line=token.line, column=token.column),
+        end=SourceSpanner.location(line=token.line, column=token.column),
     )
 
 
 def test_between_locations() -> None:
-    start = SourceLocation(1, 1)
-    end = SourceLocation(5, 3)
+    start = Token(
+        TokenType.IDENTIFIER,
+        "PART",
+        line=4,
+        column=17,
+    )
+    end = Token(
+        TokenType.IDENTIFIER,
+        "PART",
+        line=5,
+        column=23,
+    )
 
     assert SourceSpanner.between(start, end) == SourceSpan(
-        start=start,
-        end=end,
+        start=SourceSpanner.location(start.line, start.column), end=SourceSpanner.location(end.line, end.column)
     )

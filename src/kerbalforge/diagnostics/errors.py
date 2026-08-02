@@ -54,5 +54,5 @@ class UnexpectedTokenError(ParseError):
 
         super().__init__(
             f"Expected {expected.name}, got {actual.type.name}.",
-            SourceSpanner.single(actual),
+            SourceSpanner.token(actual),
         )
