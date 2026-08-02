@@ -6,10 +6,9 @@ from dataclasses import dataclass, field
 from kerbalforge.diagnostics import SourceSpan
 
 
+@dataclass(slots=True, kw_only=True)
 class Statement(ABC):  # noqa: B024
-    """Base class for all AST statements."""
-
-    span: SourceSpan | None = None
+    span: SourceSpan = None  # type: ignore[assignment]
 
 
 @dataclass(slots=True)

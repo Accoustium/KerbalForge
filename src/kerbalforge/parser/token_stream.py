@@ -60,7 +60,7 @@ class TokenStream:
 
         return self.consume()
 
-    def expect_identifier(self) -> str:
+    def expect_identifier(self) -> Token:
         token = self.expect(TokenType.IDENTIFIER)
 
-        return token.value
+        return token

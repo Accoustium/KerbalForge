@@ -9,10 +9,20 @@ class SourceSpanner:
         return SourceLocation(line, column)
 
     @staticmethod
+    def locations(
+        start: SourceLocation,
+        end: SourceLocation,
+    ) -> SourceSpan:
+        return SourceSpan(start, end)
+
+    @staticmethod
     def token(token: Token) -> SourceSpan:
-        return SourceSpan(
-            SourceSpanner.location(token.line, token.column), SourceSpanner.location(token.line, token.column)
+        location = SourceSpanner.location(
+            token.line,
+            token.column,
         )
+
+        return SourceSpan(location, location)
 
     @staticmethod
     def between(
@@ -20,5 +30,12 @@ class SourceSpanner:
         end: Token,
     ) -> SourceSpan:
         return SourceSpan(
-            SourceSpanner.location(start.line, start.column), SourceSpanner.location(end.line, end.column)
+            SourceSpanner.location(
+                start.line,
+                start.column,
+            ),
+            SourceSpanner.location(
+                end.line,
+                end.column,
+            ),
         )

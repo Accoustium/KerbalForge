@@ -184,3 +184,61 @@ PART
 
     with pytest.raises(SyntaxError):
         parser.parse()
+
+
+def test_property_has_span() -> None:
+    parser = Parser(
+        Tokenizer(
+            """
+PART
+{
+    part = probeCore
+}
+"""
+        )
+    )
+
+    document = parser.parse()
+
+    prop = document.nodes[0].body[0]
+
+    assert prop.span.start.line == 4
+    assert prop.span.end.line == 4
+
+
+def test_node_has_span() -> None:
+    parser = Parser(
+        Tokenizer(
+            """
+PART
+{
+}
+"""
+        )
+    )
+
+    document = parser.parse()
+
+    assert document.nodes[0].span is not None
+
+
+def test_nested_node_has_span() -> None:
+    parser = Parser(
+        Tokenizer(
+            """
+PART
+{
+    MODULE
+    {
+    }
+}
+"""
+        )
+    )
+
+    document = parser.parse()
+
+    module = document.nodes[0].body[0]
+
+    assert isinstance(module, Node)
+    assert module.span is not None
