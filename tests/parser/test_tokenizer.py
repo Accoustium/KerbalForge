@@ -1,4 +1,5 @@
-from kerbalforge.parser import Tokenizer, TokenType
+from kerbalforge.models import TokenType
+from kerbalforge.parser import Tokenizer
 
 
 def test_left_brace() -> None:

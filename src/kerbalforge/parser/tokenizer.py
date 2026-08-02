@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Self
 
-from .tokens import Token, TokenType
+from kerbalforge.models import Token, TokenType
 
 
 class Tokenizer:

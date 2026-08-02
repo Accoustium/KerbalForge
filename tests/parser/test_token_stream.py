@@ -1,6 +1,7 @@
 import pytest
 
-from kerbalforge.parser import Tokenizer, TokenStream, TokenType
+from kerbalforge.models import TokenType
+from kerbalforge.parser import Tokenizer, TokenStream
 
 
 def test_peek_does_not_consume() -> None:

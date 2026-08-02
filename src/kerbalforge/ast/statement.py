@@ -3,17 +3,7 @@ from __future__ import annotations
 from abc import ABC
 from dataclasses import dataclass, field
 
-
-@dataclass(frozen=True, slots=True)
-class SourceLocation:
-    line: int
-    column: int
-
-
-@dataclass(frozen=True, slots=True)
-class SourceSpan:
-    start: SourceLocation
-    end: SourceLocation
+from kerbalforge.diagnostics import SourceSpan
 
 
 class Statement(ABC):  # noqa: B024

@@ -3,7 +3,7 @@ from __future__ import annotations
 from collections import deque
 from collections.abc import Iterable, Iterator
 
-from .tokens import Token, TokenType
+from kerbalforge.models import Token, TokenType
 
 
 class TokenStream:

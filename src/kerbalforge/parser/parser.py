@@ -1,9 +1,9 @@
 from collections.abc import Iterable
 
 from kerbalforge.ast import Document, Node, Property, Statement
+from kerbalforge.models import Token, TokenType
 
 from .token_stream import TokenStream
-from .tokens import Token, TokenType
 
 
 class Parser:
