@@ -23,4 +23,4 @@ def test_property() -> None:
 def test_document_empty() -> None:
     document = Document()
 
-    assert document.nodes == []
+    assert document.body == []

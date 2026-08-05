@@ -3,6 +3,7 @@ from __future__ import annotations
 from collections import deque
 from collections.abc import Iterable, Iterator
 
+from kerbalforge.diagnostics import UnexpectedEOFError, UnexpectedTokenError
 from kerbalforge.models import Token, TokenType
 
 
@@ -18,7 +19,7 @@ class TokenStream:
             try:
                 self._buffer.append(next(self._iterator))
             except StopIteration as exc:
-                raise SyntaxError("Unexpected end of input") from exc
+                raise UnexpectedEOFError() from exc
 
     def peek(self, offset: int = 0) -> Token:
         self._fill(offset)
@@ -56,7 +57,7 @@ class TokenStream:
         token = self.peek()
 
         if token.type is not token_type:
-            raise SyntaxError(f"Expected {token_type.name}, got {token.type.name}")
+            raise UnexpectedTokenError(token_type, token)
 
         return self.consume()
 

@@ -1,8 +1,8 @@
 from dataclasses import dataclass, field
 
-from .statement import Node
+from .statement import Statement
 
 
 @dataclass(slots=True)
 class Document:
-    nodes: list[Node] = field(default_factory=list)
+    body: list[Statement] = field(default_factory=list)

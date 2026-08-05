@@ -15,7 +15,7 @@ class Parser:
         document = Document()
 
         while not self._stream.eof:
-            document.nodes.append(self._parse_node())
+            document.body.append(self._parse_statement())
 
         return document
 
@@ -49,7 +49,7 @@ class Parser:
     def _parse_property(self) -> Property:
         key = self._stream.expect(TokenType.IDENTIFIER)
         self._stream.expect(TokenType.EQUALS)
-        value = self._stream.expect(TokenType.IDENTIFIER)
+        value = self._stream.expect(TokenType.PROPERTY_VALUE)
 
         return Property(
             key=key.value,

@@ -106,6 +106,58 @@ RESOURCE
         TokenType.LBRACE,
         TokenType.IDENTIFIER,
         TokenType.EQUALS,
-        TokenType.IDENTIFIER,
+        TokenType.PROPERTY_VALUE,
         TokenType.RBRACE,
     ]
+
+
+def test_spaced_name() -> None:
+    tokens = list(
+        Tokenizer(
+            """
+ship = My Craft
+"""
+        )
+    )
+
+    assert tokens[0].value == "ship"
+    assert tokens[2].value == "My Craft"
+
+
+def test_empty_property() -> None:
+    tokens = list(
+        Tokenizer(
+            """
+description =
+"""
+        )
+    )
+
+    assert tokens[0].value == "description"
+    assert tokens[2].value == ""
+
+
+def test_version_as_str() -> None:
+    tokens = list(
+        Tokenizer(
+            """
+version = 1.12.5
+"""
+        )
+    )
+
+    assert tokens[0].value == "version"
+    assert tokens[2].value == "1.12.5"
+
+
+def test_multi_break_property() -> None:
+    tokens = list(
+        Tokenizer(
+            """
+attN = bottom,Null_0_0|-1|0
+"""
+        )
+    )
+
+    assert tokens[0].value == "attN"
+    assert tokens[2].value == "bottom,Null_0_0|-1|0"

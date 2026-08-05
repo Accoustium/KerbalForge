@@ -1,5 +1,6 @@
 import pytest
 
+from kerbalforge.diagnostics import UnexpectedTokenError
 from kerbalforge.models import TokenType
 from kerbalforge.parser import Tokenizer, TokenStream
 
@@ -52,7 +53,7 @@ def test_expect_success() -> None:
 def test_expect_failure() -> None:
     stream = TokenStream(Tokenizer("{"))
 
-    with pytest.raises(SyntaxError):
+    with pytest.raises(UnexpectedTokenError):
         stream.expect(TokenType.RBRACE)
 
 
