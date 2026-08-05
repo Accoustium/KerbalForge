@@ -26,6 +26,10 @@ class Tokenizer:
             raise StopIteration
 
         while not self._eof():
+            if self._peek_comment():
+                self._skip_comment()
+                continue
+
             ch = self._peek()
 
             if self._expect_property_value:
@@ -115,6 +119,9 @@ class Tokenizer:
         chars: list[str] = []
 
         while not self._eof():
+            if self._peek_comment():
+                break
+
             ch = self._peek()
 
             if ch == "\n":
@@ -125,7 +132,26 @@ class Tokenizer:
 
         return Token(
             TokenType.PROPERTY_VALUE,
-            "".join(chars),
+            "".join(chars).rstrip(),
             start_line,
             start_column,
         )
+
+    def _peek_comment(self) -> bool:
+        if self._eof():
+            return False
+
+        if self._peek() != "/":
+            return False
+
+        if self.index + 1 >= len(self.text):
+            return False
+
+        return self.text[self.index + 1] == "/"
+
+    def _skip_comment(self) -> None:
+        while not self._eof():
+            if self._peek() == "\n":
+                break
+
+            self._advance()

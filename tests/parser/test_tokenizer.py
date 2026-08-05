@@ -161,3 +161,64 @@ attN = bottom,Null_0_0|-1|0
 
     assert tokens[0].value == "attN"
     assert tokens[2].value == "bottom,Null_0_0|-1|0"
+
+
+def test_comment_begining_line() -> None:
+    token = list(
+        Tokenizer(
+            """
+// Comment
+
+PART
+{
+}
+"""
+        )
+    )
+
+    assert token[0].value == "PART"
+
+
+def test_indented_comment() -> None:
+    token = list(
+        Tokenizer(
+            """
+    // Comment
+
+PART
+{
+}
+"""
+        )
+    )
+
+    assert token[0].value == "PART"
+
+
+def test_inline_comment() -> None:
+    token = list(
+        Tokenizer(
+            """
+PART
+{
+    part = probeCore // This is a probe
+}
+"""
+        )
+    )
+
+    assert token[0].value == "PART"
+    assert token[4].value == "probeCore"
+
+
+def test_blank_value_with_comment() -> None:
+    tokens = list(
+        Tokenizer(
+            """
+description = // No description
+"""
+        )
+    )
+
+    assert tokens[0].value == "description"
+    assert tokens[2].value == ""
