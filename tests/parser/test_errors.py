@@ -1,4 +1,11 @@
-from kerbalforge.diagnostics import ParseError, SourceLocation, SourceSpan, UnexpectedEOFError, UnexpectedTokenError
+from kerbalforge.diagnostics import (
+    ParseError,
+    ResolutionError,
+    SourceLocation,
+    SourceSpan,
+    UnexpectedEOFError,
+    UnexpectedTokenError,
+)
 from kerbalforge.models import Token, TokenType
 
 
@@ -48,3 +55,30 @@ def test_unexpected_eof_error() -> None:
     error = UnexpectedEOFError(span)
 
     assert error.span == span
+
+
+def test_resolution_error_is_diagnostic_error() -> None:
+    error = ResolutionError("Unable to resolve part.")
+
+    assert isinstance(error, ResolutionError)
+
+
+def test_resolution_error_message() -> None:
+    error = ResolutionError("Unable to resolve part.")
+
+    assert str(error) == "Unable to resolve part."
+
+
+def test_resolution_error_with_span() -> None:
+    span = SourceSpan(
+        SourceLocation(1, 1),
+        SourceLocation(1, 10),
+    )
+
+    error = ResolutionError(
+        "Unable to resolve part.",
+        span,
+    )
+
+    assert error.span == span
+    assert "Unable to resolve part." in str(error)

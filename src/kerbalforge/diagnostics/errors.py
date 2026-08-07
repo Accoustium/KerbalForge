@@ -56,3 +56,7 @@ class UnexpectedTokenError(ParseError):
             f"Expected {expected.name}, got {actual.type.name}.",
             SourceSpanner.token(actual),
         )
+
+
+class ResolutionError(DiagnosticError):
+    """Raised when parsed data cannot be resolved into a semantic model."""

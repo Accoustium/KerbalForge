@@ -8,6 +8,7 @@ from kerbalforge.parser import Parser, Tokenizer
 TESTS_ROOT = Path(__file__).resolve().parent
 FIXTURES_ROOT = TESTS_ROOT / "fixtures"
 CRAFT_FIXTURES = FIXTURES_ROOT / "craft"
+CFG_FIXTURES = FIXTURES_ROOT / "cfg"
 
 
 def load_fixture(name: str) -> str:
@@ -23,3 +24,8 @@ def parse_fixture():
         return Parser(Tokenizer(load_fixture(name))).parse()
 
     return _parse_fixture
+
+
+@pytest.fixture(scope="session")  # type: ignore[misc]
+def engine_cfg() -> Path:
+    return CFG_FIXTURES / "liquidEngine48-7S_v2" / "liquidEngine48-7S_v2.cfg"

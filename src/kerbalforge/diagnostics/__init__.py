@@ -1,5 +1,13 @@
-from .errors import ParseError, UnexpectedEOFError, UnexpectedTokenError
+from .errors import ParseError, ResolutionError, UnexpectedEOFError, UnexpectedTokenError
 from .source import SourceLocation, SourceSpan
 from .spanner import SourceSpanner
 
-__all__ = ["SourceLocation", "SourceSpan", "SourceSpanner", "ParseError", "UnexpectedEOFError", "UnexpectedTokenError"]
+__all__ = [
+    "SourceLocation",
+    "SourceSpan",
+    "SourceSpanner",
+    "ParseError",
+    "UnexpectedEOFError",
+    "UnexpectedTokenError",
+    "ResolutionError",
+]
